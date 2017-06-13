@@ -1,2 +1,2 @@
 # glutton
-record what you eat every day(for android)
+看看每天你都吃了什么
