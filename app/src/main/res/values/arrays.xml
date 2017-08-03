@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--eat_time:'breakfast',  'before_lunch',  'lunch',  'before_dinner',  'dinner',  'midnight_snack'-->
+    <string-array name="eat_time">
+        <item>早餐</item>
+        <item>上午茶</item>
+        <item>午餐</item>
+        <item>下午茶</item>
+        <item>晚餐</item>
+        <item>夜宵</item>
+    </string-array>
+</resources>
