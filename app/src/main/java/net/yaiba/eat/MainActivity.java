@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -32,9 +35,10 @@ import static net.yaiba.eat.utils.Custom.getEatTimeName;
 
 public class MainActivity extends Activity implements  AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener {
 
-    private  EatDB EatDB;
+    private EatDB EatDB;
     private Cursor mCursor;
     private ListView RecordList;
+    private EditText SearchInput;
 
     private int RECORD_ID = 0;
     @Override
@@ -62,13 +66,42 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+        SearchInput = (EditText)findViewById(R.id.searchInput);
+        SearchInput.clearFocus();
+        SearchInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(SearchInput.getText().toString().trim().length()!=0){
+                    try {
+                        setUpViews("search",SearchInput.getText().toString().trim());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    setUpViews("all",null);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Toast.makeText(LoginActivity.this, "beforeTextChanged", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Toast.makeText(LoginActivity.this, "afterTextChanged", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
 
     public void setUpViews(String type, String value){
         EatDB = new EatDB(this);
         if("all".equals(type)){
-            mCursor = EatDB.getAll("id asc");
+            mCursor = EatDB.getAll("create_time desc");
         } else if("search".equals(type)) {
             mCursor = EatDB.getForSearch(value);
         }
@@ -97,8 +130,9 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
             map.put("foodName", foodName);
             map.put("eatTime", getEatTimeName(eatTime));
             map.put("eatWhere", eatWhere);
-            map.put("remark", remark);
-            map.put("createTime", createTime);
+//            map.put("remark", remark);
+            String[] data = createTime.split("-");
+            map.put("createTime", data[1]+"/"+data[2]);
             listItem.add(map);
         }
 

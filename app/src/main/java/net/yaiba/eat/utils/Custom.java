@@ -6,6 +6,9 @@ import android.content.pm.PackageManager;
 
 import net.yaiba.eat.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class Custom {
 
     public static String getVersion(Context context)//获取版本号

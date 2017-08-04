@@ -4,6 +4,12 @@
                                         android:layout_width="fill_parent" 
                                         android:layout_height="fill_parent">
 
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
@@ -48,12 +54,26 @@
                 android:textSize="12sp"
                 android:text="时间" />
 
-            <EditText
-                android:id="@+id/create_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="30"
-                android:ems="10" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:weightSum="1">
+
+                <EditText
+                    android:id="@+id/create_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLength="30"
+                    android:ems="10" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="getDate"
+                    android:text="设置日期" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

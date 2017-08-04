@@ -33,27 +33,27 @@ public class EatDB extends SQLiteOpenHelper {
                 + EAT_WHEN +" NVARCHAR(100) NOT NULL, "
                 + EAT_WHERE +" NVARCHAR(100) NULL, "
                 + REMARK +" TEXT NULL , "
-                + CREATE_TIME +" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                + CREATE_TIME +" NVARCHAR(100) NOT NULL);";
         db.execSQL(sql);
 
         //test date
         String sql2 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  'apppai',  'breakfast', '大润发',  '600gx2',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  'apppai',  'breakfast', '大润发',  '600gx2',	'2016-01-02'		);";
         db.execSQL(sql2);
         String sql3 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '春卷',  'lunch', '大润发',  '1包',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '春卷',  'lunch', '大润发',  '1包',	'2016-05-02'		);";
         db.execSQL(sql3);
         String sql4 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '巨无霸',  'lunch', '麦当劳',  '套餐',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '巨无霸',  'lunch', '麦当劳',  '套餐',	'2016-05-02'		);";
         db.execSQL(sql4);
         String sql5 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '珍珍',  'before_dinner', '友宝',  '',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '珍珍',  'before_dinner', '友宝',  '',	'2017-08-02'		);";
         db.execSQL(sql5);
         String sql6 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '老口味酸奶',  'before_dinner', '',  '',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '老口味酸奶',  'before_dinner', '',  '',	'2017-08-02'		);";
         db.execSQL(sql6);
         String sql7 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '炸酱面',  'dinner', '',  '',	CURRENT_TIMESTAMP		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '炸酱面',  'dinner', '',  '',	'2017-08-01'		);";
         db.execSQL(sql7);
     }
 
@@ -87,7 +87,7 @@ public class EatDB extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public long insert(String food_name,String eat_time,String eat_where,String remark){
+    public long insert(String food_name,String eat_time,String create_time,String eat_where,String remark){
         SQLiteDatabase db = this.getWritableDatabase();
 		/* ContentValues */
         ContentValues cv = new ContentValues();
@@ -96,11 +96,13 @@ public class EatDB extends SQLiteOpenHelper {
         if(eat_where.equals(null)){
             eat_where = "";
         }
+        cv.put(CREATE_TIME, create_time);
         cv.put(EAT_WHERE, eat_where);
         if(remark.equals(null)){
             remark = "";
         }
         cv.put(REMARK, remark);
+
         long row = db.insert(TABLE_NAME, null, cv);
         return row;
     }
@@ -124,7 +126,7 @@ public class EatDB extends SQLiteOpenHelper {
         db.update("sqlite_sequence", cv, where, whereValue);
     }
 
-    public void update(int id, String food_name,String eat_time,String eat_where,String remark){
+    public void update(int id, String food_name,String eat_time,String create_time,String eat_where,String remark){
         SQLiteDatabase db = this.getWritableDatabase();
         String where = RECORD_ID + " = ?";
         String[] whereValue = { Integer.toString(id) };
@@ -134,11 +136,13 @@ public class EatDB extends SQLiteOpenHelper {
         if(eat_where.equals(null)){
             eat_where = "";
         }
+        cv.put(CREATE_TIME, create_time);
         cv.put(EAT_WHERE, eat_where);
         if(remark.equals(null)){
             remark = "";
         }
         cv.put(REMARK, remark);
+
         db.update(TABLE_NAME, cv, where, whereValue);
     }
 
