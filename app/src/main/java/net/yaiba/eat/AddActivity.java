@@ -185,7 +185,7 @@ public class AddActivity extends Activity {
 			return false;
 		}
 		try {
-			EatDB.insert(foodname, getEatTimeValue(eattime),createTime , eatwhere, remark );
+			EatDB.insert(foodname, getEatTimeValue(eattime) , eatwhere, remark, createTime );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

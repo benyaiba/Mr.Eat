@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,13 @@ import static net.yaiba.eat.utils.Custom.getEatTimeName;
 
 
 public class MainActivity extends Activity implements  AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener {
+
+    private static final int MENU_ABOUT = 0;
+    private static final int MENU_SUPPORT = 1;
+    private static final int MENU_WHATUPDATE = 2;
+    private static final int MENU_IMPORT_EXPOERT = 3;
+    private static final int MENU_CHANGE_LOGIN_PASSWORD = 4;
+    private static final int MENU_CHECK_UPDATE = 5;
 
     private EatDB EatDB;
     private Cursor mCursor;
@@ -132,7 +140,12 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
             map.put("eatWhere", eatWhere);
 //            map.put("remark", remark);
             String[] data = createTime.split("-");
-            map.put("createTime", data[1]+"/"+data[2]);
+            if(data.length==3){
+                map.put("createTime", data[1]+"/"+data[2]);
+            }else {
+                map.put("createTime", "/");
+            }
+
             listItem.add(map);
         }
 
@@ -278,5 +291,89 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         mCursor.moveToPosition(position);
         RECORD_ID = mCursor.getInt(0);
         return false;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(Menu.NONE, MENU_IMPORT_EXPOERT, 0, this.getString(R.string.menu_inport_export));//备份与恢复
+        //menu.add(Menu.NONE, MENU_CHANGE_LOGIN_PASSWORD, 0, this.getString(R.string.menu_change_login_password));//修改登录密码
+        menu.add(Menu.NONE, MENU_WHATUPDATE, 0, this.getString(R.string.menu_whatupdate));//更新信息
+        menu.add(Menu.NONE, MENU_CHECK_UPDATE, 0, this.getString(R.string.menu_checkupdate));//检查更新
+        menu.add(Menu.NONE, MENU_SUPPORT, 0, this.getString(R.string.menu_support));//技术支持
+        menu.add(Menu.NONE, MENU_ABOUT, 0, this.getString(R.string.menu_about));//关于Keep
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        String title = "";
+        String msg = "";
+        //Context mContext = null;
+
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+            case MENU_ABOUT://关于Eat
+                title = this.getString(R.string.menu_about);
+                msg = this.getString(R.string.about_eat);
+                msg = msg + "\n\n";
+                msg = msg + "@"+getAppVersion();
+                showAboutDialog(title,msg);
+                break;
+            case MENU_SUPPORT://技术支持
+                title = this.getString(R.string.menu_support);
+                msg = this.getString(R.string.partners);
+                showAboutDialog(title,msg);
+                break;
+            case MENU_WHATUPDATE://更新信息
+                title = this.getString(R.string.menu_whatupdate);
+                msg = msg + this.getString(R.string.what_updated);
+                msg = msg + "\n\n\n";
+                showAboutDialog(title,msg);
+                break;
+            case MENU_CHECK_UPDATE://检查更新
+                title = this.getString(R.string.menu_checkupdate);
+                msg = "本功能正在升级";//1.增加双服务器检测更新机制\n2.检查更新\n\n以上功能
+//                updateTask = new UpdateTask(MainActivity.this,true);
+//                updateTask.update();
+
+                showAboutDialog(title,msg);
+                break;
+            case MENU_IMPORT_EXPOERT://备份与恢复
+                Intent mainIntent = new Intent(MainActivity.this, DataManagementActivity.class);
+                startActivity(mainIntent);
+                setResult(RESULT_OK, mainIntent);
+                finish();
+                break;
+//            case MENU_CHANGE_LOGIN_PASSWORD:
+//                Intent mainIntent2 = new Intent(MainActivity.this, LoginPEditActivity.class);
+//                startActivity(mainIntent2);
+//                setResult(RESULT_OK, mainIntent2);
+//                finish();
+//                break;
+        }
+        return true;
+    }
+
+    public void showAboutDialog(String title,String msg){
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setIcon(android.R.drawable.ic_dialog_info);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("确定", null);
+        builder.create().show();
+    }
+
+    private String getAppVersion() {
+        try {
+            String pkName = this.getPackageName();
+            String versionName = this.getPackageManager().getPackageInfo(pkName, 0).versionName;
+            //int versionCode = this.getPackageManager().getPackageInfo(pkName, 0).versionCode;
+            return versionName;
+        } catch (Exception e) {
+        }
+        return null;
     }
 }

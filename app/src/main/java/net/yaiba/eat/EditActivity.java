@@ -136,7 +136,7 @@ public class EditActivity extends Activity {
 
 
 		try {
-			EatDB.update(RECORD_ID, foodname, getEatTimeValue(eattime),createTime, eatwhere, remark);
+			EatDB.update(RECORD_ID, foodname, getEatTimeValue(eattime), eatwhere, remark ,createTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

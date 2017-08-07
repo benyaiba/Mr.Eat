@@ -7,8 +7,6 @@ android {
         applicationId "net.yaiba.eat"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,12 +25,13 @@ android {
                 //读取AndroidManifest.xml文件中的versionName属性，用于生成发布文件名
                 def androidManifest = new XmlSlurper().parse("app\\src\\main\\AndroidManifest.xml")
 
-                def fileName = outputFile.name.replace("app","${defaultConfig.applicationId }_${androidManifest['@android:versionName']}")
+                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${androidManifest['@android:versionName']}")
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
     }
 
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/menu'] } }
 }
 
 dependencies {

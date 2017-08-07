@@ -87,7 +87,7 @@ public class EatDB extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public long insert(String food_name,String eat_time,String create_time,String eat_where,String remark){
+    public long insert(String food_name,String eat_time,String eat_where,String remark,String create_time){
         SQLiteDatabase db = this.getWritableDatabase();
 		/* ContentValues */
         ContentValues cv = new ContentValues();
