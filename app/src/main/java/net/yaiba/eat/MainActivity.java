@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.yaiba.eat.db.EatDB;
+import net.yaiba.eat.utils.UpdateTask;
 
 import static net.yaiba.eat.utils.Custom.getEatTimeName;
 //import net.yaiba.eat.data.ListViewData;
@@ -47,6 +48,8 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     private Cursor mCursor;
     private ListView RecordList;
     private EditText SearchInput;
+
+    private UpdateTask updateTask;
 
     private int RECORD_ID = 0;
     @Override
@@ -334,12 +337,12 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
                 showAboutDialog(title,msg);
                 break;
             case MENU_CHECK_UPDATE://检查更新
-                title = this.getString(R.string.menu_checkupdate);
-                msg = "本功能正在升级";//1.增加双服务器检测更新机制\n2.检查更新\n\n以上功能
-//                updateTask = new UpdateTask(MainActivity.this,true);
-//                updateTask.update();
+//                title = this.getString(R.string.menu_checkupdate);
+//                msg = "本功能正在升级";//1.增加双服务器检测更新机制\n2.检查更新\n\n以上功能
+                updateTask = new UpdateTask(MainActivity.this,true);
+                updateTask.update();
 
-                showAboutDialog(title,msg);
+//                showAboutDialog(title,msg);
                 break;
             case MENU_IMPORT_EXPOERT://备份与恢复
                 Intent mainIntent = new Intent(MainActivity.this, DataManagementActivity.class);

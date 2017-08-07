@@ -47,6 +47,12 @@
     <string name="menu_support">技术支持</string>
     <string name="menu_about">关于Eat</string>
 
+    <string name="update_already_latest">已经是最新版本</string>
+    <string name="update_new_seg1">发现新版本，版本号：</string>
+    <string name="update_new_seg2">\n正在下载更新</string>
+    <string name="update_new_seg3">\n正在下载更新</string>
+    <string name="update_error">更新出错</string>
+
     <string name="data_bakup">数据备份</string>
     <string name="data_bakup_description">数据将以文件形式存储在您的设备中</string>
     <string name="data_bakup_description_dir">/eat/</string>
@@ -59,12 +65,11 @@
 
     <string name="what_updated">
         0.0.1.0\n基础功能开发 #2
-        \n\n0.0.2.0\n数据备份与恢复 #4
+        \n\n0.0.2.0\n数据备份与恢复，版本检查更新 #4
     </string>
     <string name="partners">\@石头大风吹</string>
     <string name="about_eat">
-        Eat，
-        \n食物多样性记录手册
+        食物多样性记录手册
         \n\n问题反馈可访问以下地址
         \nYaiba.net</string>
 
