@@ -163,8 +163,15 @@ public class EditActivity extends Activity {
 
 
 		String[] data = mCursor.getString(5).split("-");
-		mYear = Integer.parseInt(data[0]);
-		mMonth = Integer.parseInt(data[1]);
-		mDay = Integer.parseInt(data[2]);
+        if(data.length==3){
+            mYear = Integer.parseInt(data[0]);
+            mMonth = Integer.parseInt(data[1]);
+            mDay = Integer.parseInt(data[2]);
+        } else {
+            mYear = 0;
+            mMonth = 0;
+            mDay = 0;
+        }
+
 	}
 }

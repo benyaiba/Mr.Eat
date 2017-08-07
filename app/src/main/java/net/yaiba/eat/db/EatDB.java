@@ -126,7 +126,7 @@ public class EatDB extends SQLiteOpenHelper {
         db.update("sqlite_sequence", cv, where, whereValue);
     }
 
-    public void update(int id, String food_name,String eat_time,String create_time,String eat_where,String remark){
+    public void update(int id, String food_name,String eat_time,String eat_where,String remark,String create_time){
         SQLiteDatabase db = this.getWritableDatabase();
         String where = RECORD_ID + " = ?";
         String[] whereValue = { Integer.toString(id) };
