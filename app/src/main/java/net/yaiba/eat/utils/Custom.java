@@ -8,6 +8,11 @@ import net.yaiba.eat.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static android.R.attr.format;
 
 public class Custom {
 
@@ -76,6 +81,28 @@ public class Custom {
             default: break;
         }
         return eatTimeValue;
+    }
+
+    public static String dayForWeek(String pTime) {
+        Calendar calendar = Calendar.getInstance();
+
+        String[] data = pTime.split("-");
+        if(data.length == 3){
+            int year = Integer.valueOf(data[0]);
+            int month = Integer.valueOf(data[1]);
+            int date = Integer.valueOf(data[2]);
+            calendar.set(year,month-1,date);
+            int number = calendar.get(Calendar.DAY_OF_WEEK)-1;
+            //if(number < 0) number = 0 ;
+            String[] str = {"日","一","二","三","四","五","六"};
+            return str[number];
+        } else {
+            return "-";
+        }
+
+
+
+
     }
 
 }

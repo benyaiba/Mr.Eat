@@ -28,6 +28,13 @@
         completions."
     </string>
 
+    <string name="info_rizi">日子</string>
+    <string name="info_fandianer">饭点儿</string>
+    <string name="info_chidesha">吃的啥</string>
+    <string name="info_nachide">哪吃的</string>
+    <string name="info_beizhu">备注</string>
+    <string name="info_xiangyongriqi">享用日期</string>
+    <string name="info_shezhishijian">设置日期</string>
 
     <string name="record_list_search">查找&#8230;</string>
     <string name="title_activity_list">ListActivity</string>
@@ -64,8 +71,9 @@
     <string name="menu_warming_have_unencode_file">警告：检测到目录中包含未加密的备份文件\n为了安全起见请备份后删除</string>
 
     <string name="what_updated">
-        0.0.1.0\n基础功能开发 #2
+        0.0.3.0\n个性化调整 #5
         \n\n0.0.2.0\n数据备份与恢复，版本检查更新 #4
+        \n\n0.0.1.0\n基础功能开发 #2
     </string>
     <string name="partners">\@石头大风吹</string>
     <string name="about_eat">

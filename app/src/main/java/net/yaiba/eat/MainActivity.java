@@ -31,6 +31,7 @@ import java.util.HashMap;
 import net.yaiba.eat.db.EatDB;
 import net.yaiba.eat.utils.UpdateTask;
 
+import static net.yaiba.eat.utils.Custom.dayForWeek;
 import static net.yaiba.eat.utils.Custom.getEatTimeName;
 //import net.yaiba.eat.data.ListViewData;
 
@@ -144,9 +145,9 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 //            map.put("remark", remark);
             String[] data = createTime.split("-");
             if(data.length==3){
-                map.put("createTime", data[1]+"/"+data[2]);
+                map.put("createTime", data[1]+"/"+data[2]+"("+dayForWeek(createTime)+")");
             }else {
-                map.put("createTime", "/");
+                map.put("createTime", "-");
             }
 
             listItem.add(map);
