@@ -66,6 +66,9 @@ public class AddActivity extends Activity {
 
 		CreateTime = (EditText) findViewById(R.id.create_time);
 
+		eatTime = (Spinner)findViewById(R.id.eat_time);
+		eatTime.setSelection(1);//早餐
+
 		setDateTime(true);
 
 
@@ -160,15 +163,19 @@ public class AddActivity extends Activity {
 		String remark = Remark.getText().toString();
 		
 		if (foodname.equals("")){
-			Toast.makeText(this, "[名称]不能为空", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "[吃的啥]没填", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (foodname.length() >30){
-			Toast.makeText(this, "[名称]长度不能超过30个文字", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "[吃的啥]食物过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (eattime.equals("")){
+			Toast.makeText(this, "[饭点儿]没有选择，请选择", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (eatwhere.length() >30){
-			Toast.makeText(this, "[密码]长度不能超过30个文字", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "[享用地点]文字过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (createTime.length() > 14){

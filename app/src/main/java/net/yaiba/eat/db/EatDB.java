@@ -5,6 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import static net.yaiba.eat.utils.Custom.getBeginDayOfMonth;
+import static net.yaiba.eat.utils.Custom.getBeginDayOfSixMonth;
+import static net.yaiba.eat.utils.Custom.getBeginDayOfThreeMonth;
+import static net.yaiba.eat.utils.Custom.getBeginDayOfThreeYear;
+import static net.yaiba.eat.utils.Custom.getBeginDayOfWeek;
+import static net.yaiba.eat.utils.Custom.getBeginDayOfYear;
+import static net.yaiba.eat.utils.Custom.getDateToString;
+import static net.yaiba.eat.utils.Custom.getEatTimeValue;
+import static net.yaiba.eat.utils.Custom.getEndDayOfMonth;
+import static net.yaiba.eat.utils.Custom.getEndDayOfWeek;
+import static net.yaiba.eat.utils.Custom.getEndDayOfYear;
 
 
 public class EatDB extends SQLiteOpenHelper {
@@ -80,10 +93,79 @@ public class EatDB extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getForSearch(String food_name) {
+    //
+    public Cursor getForSearch(String food_name, String create_time, String eat_time) {
+        String where = "";
+        String sql_foodname ="";
+        if (!food_name.isEmpty()){
+            sql_foodname = "("+EAT_WHAT + " LIKE '%" + food_name + "%' or " + EAT_WHERE + " LIKE '%" + food_name + "%' or " + REMARK + " LIKE '%" + food_name + "%' " + ")";
+        }
+
+        String createtime =  "";
+
+        String orderby = "create_time desc";
+
+        String start_date = "";
+        String end_date = "";
+
+        if(create_time.isEmpty()){
+            create_time = "全部";
+        }
+
+        switch(create_time) {
+            case "本周":
+                start_date = getDateToString(getBeginDayOfWeek());
+                end_date = getDateToString(getEndDayOfWeek());
+                break;
+            case "本月":
+                start_date = getDateToString(getBeginDayOfMonth());
+                end_date = getDateToString(getEndDayOfMonth());
+                break;
+            case "三个月内":
+                start_date = getDateToString(getBeginDayOfThreeMonth());
+                end_date = getDateToString(getEndDayOfMonth());
+                break;
+            case "六个月内":
+                start_date = getDateToString(getBeginDayOfSixMonth());
+                end_date = getDateToString(getEndDayOfMonth());
+                break;
+            case "本年":
+                start_date = getDateToString(getBeginDayOfYear());
+                end_date = getDateToString(getEndDayOfYear());
+                break;
+            case "三年内":
+                start_date = getDateToString(getBeginDayOfThreeYear());
+                end_date = getDateToString(getEndDayOfYear());
+                break;
+            case "全部":
+                start_date = "1900-01-01";
+                end_date = "9909-12-31";
+                break;
+            default: break;
+        }
+
+        String sql_create_time = "( "+CREATE_TIME+">='" +start_date +"' and " + CREATE_TIME + "<='" + end_date +"' )";
+
+        if(!food_name.isEmpty()){
+            where = sql_foodname + " and "+sql_create_time;
+        } else{
+            where = sql_create_time;
+        }
+
+
+
+        if(!eat_time.isEmpty()){
+            String sql_eat_time = "( "+EAT_WHEN+ " = '"+getEatTimeValue(eat_time)+"' )";
+            where =  where +" and "+sql_eat_time;
+        }
+
+        Log.v("debug",where);
+
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(true, TABLE_NAME, new String[] {RECORD_ID, EAT_WHAT, EAT_WHEN, EAT_WHERE, REMARK, CREATE_TIME}, EAT_WHAT
-                + " LIKE '%" + food_name + "%' or " + EAT_WHERE + " LIKE '%" + food_name + "%' or " + REMARK + " LIKE '%" + food_name + "%' ", null, null, null, null, null);
+        Cursor cursor = db.query(true,
+                TABLE_NAME,
+                new String[] {RECORD_ID, EAT_WHAT, EAT_WHEN, EAT_WHERE, REMARK, CREATE_TIME},
+                where , null, null, null, orderby, null);
         return cursor;
     }
 

@@ -2,6 +2,7 @@
 <resources>
     <!--eat_time:'breakfast',  'before_lunch',  'lunch',  'before_dinner',  'dinner',  'midnight_snack'-->
     <string-array name="eat_time">
+        <item> </item>
         <item>早餐</item>
         <item>上午茶</item>
         <item>午餐</item>
@@ -9,4 +10,15 @@
         <item>晚餐</item>
         <item>夜宵</item>
     </string-array>
+
+    <string-array name="filter_create_time">
+        <item>本周</item>
+        <item>本月</item>
+        <item>三个月内</item>
+        <item>六个月内</item>
+        <item>本年</item>
+        <item>三年内</item>
+        <item>全部</item>
+    </string-array>
+
 </resources>

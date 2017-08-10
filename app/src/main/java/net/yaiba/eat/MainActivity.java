@@ -2,12 +2,10 @@ package net.yaiba.eat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,8 +18,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +31,7 @@ import java.util.HashMap;
 import net.yaiba.eat.db.EatDB;
 import net.yaiba.eat.utils.UpdateTask;
 
-import static net.yaiba.eat.utils.Custom.dayForWeek;
-import static net.yaiba.eat.utils.Custom.getEatTimeName;
+import static net.yaiba.eat.utils.Custom.*;
 //import net.yaiba.eat.data.ListViewData;
 
 
@@ -49,8 +48,16 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     private Cursor mCursor;
     private ListView RecordList;
     private EditText SearchInput;
+    private Spinner spinner_filter_create_time;
+    private Spinner spinner_filter_eat_time;
 
     private UpdateTask updateTask;
+
+    private LinearLayout filtersOption;
+    private Button bn_filters;
+    private boolean isButton = true;
+
+    private Button bn_filter_now;
 
     private int RECORD_ID = 0;
     @Override
@@ -67,6 +74,43 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
                 startActivity(mainIntent);
                 setResult(RESULT_OK, mainIntent);
                 finish();
+            }
+        });
+
+        //设置一览数据过滤区域 开和隐藏
+        bn_filters = (Button)findViewById(R.id.filters);
+        filtersOption = (LinearLayout) findViewById(R.id.filters_option);
+        bn_filters.setOnClickListener(new View.OnClickListener(){
+            public void  onClick(View v)
+            {
+                if(isButton){
+                    filtersOption.setVisibility(View.VISIBLE);
+                    isButton = false;
+                    bn_filters.setText("-");
+                }else {
+                    filtersOption.setVisibility(View.GONE);
+                    isButton = true;
+                    bn_filters.setText("+");
+                    SearchInput = (EditText)findViewById(R.id.searchInput);
+                    setUpViews("search",SearchInput.getText().toString().trim());
+                }
+            }
+        });
+
+        bn_filter_now = (Button)findViewById(R.id.filter_now);
+        filtersOption = (LinearLayout) findViewById(R.id.filters_option);
+        spinner_filter_create_time = (Spinner)findViewById(R.id.filter_create_time);
+        spinner_filter_eat_time = (Spinner)findViewById(R.id.filter_eat_time);
+        spinner_filter_create_time.setSelection(0,true);
+        spinner_filter_eat_time.setSelection(0,true);
+        bn_filter_now.setOnClickListener(new View.OnClickListener(){
+            public void  onClick(View v)
+            {
+                //Toast.makeText(MainActivity.this, "日期范围："+spinner_filter_create_time.getSelectedItem().toString()+",餐别："+spinner_filter_eat_time.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "文本框内容："+SearchInput.getText().toString().trim()+ ",查询时间："+spinner_filter_create_time.getSelectedItem().toString()+"，查询类型："+spinner_filter_eat_time.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                SearchInput = (EditText)findViewById(R.id.searchInput);
+                setUpViews("search",SearchInput.getText().toString().trim());
+
             }
         });
 
@@ -115,7 +159,23 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         if("all".equals(type)){
             mCursor = EatDB.getAll("create_time desc");
         } else if("search".equals(type)) {
-            mCursor = EatDB.getForSearch(value);
+
+            bn_filters = (Button)findViewById(R.id.filters);
+            if(bn_filters.getText().equals("+")){
+                mCursor = EatDB.getForSearch(value,"","");
+            } else{
+                spinner_filter_create_time = (Spinner)findViewById(R.id.filter_create_time);
+                spinner_filter_eat_time = (Spinner)findViewById(R.id.filter_eat_time);
+                mCursor = EatDB.getForSearch(value,spinner_filter_create_time.getSelectedItem().toString(),spinner_filter_eat_time.getSelectedItem().toString());
+            }
+        } else if("filter".equals(type)){
+            spinner_filter_create_time = (Spinner)findViewById(R.id.filter_create_time);
+            spinner_filter_eat_time = (Spinner)findViewById(R.id.filter_eat_time);
+            if(spinner_filter_eat_time.getSelectedItem().toString().isEmpty()){
+                mCursor = EatDB.getForSearch(value,spinner_filter_create_time.getSelectedItem().toString(),"");
+            } else {
+                mCursor = EatDB.getForSearch(value,spinner_filter_create_time.getSelectedItem().toString(),spinner_filter_eat_time.getSelectedItem().toString());
+            }
         }
 
         RecordList = (ListView)findViewById(R.id.recordslist);
@@ -240,8 +300,6 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     }
 
 
-
-
     /**
      * 保存当前页签listView的第一个可见的位置和top
      */
@@ -323,7 +381,7 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
                 title = this.getString(R.string.menu_about);
                 msg = this.getString(R.string.about_eat);
                 msg = msg + "\n\n";
-                msg = msg + "@"+getAppVersion();
+                msg = msg + "@"+getAppVersion(MainActivity.this);
                 showAboutDialog(title,msg);
                 break;
             case MENU_SUPPORT://技术支持
@@ -370,14 +428,5 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         builder.create().show();
     }
 
-    private String getAppVersion() {
-        try {
-            String pkName = this.getPackageName();
-            String versionName = this.getPackageManager().getPackageInfo(pkName, 0).versionName;
-            //int versionCode = this.getPackageManager().getPackageInfo(pkName, 0).versionCode;
-            return versionName;
-        } catch (Exception e) {
-        }
-        return null;
-    }
+
 }
