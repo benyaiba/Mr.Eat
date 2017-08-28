@@ -110,8 +110,8 @@ public class EditActivity extends Activity {
 			return false;
 		}
 
-		if (foodname.length() >30){
-			Toast.makeText(this, "[吃的啥]食物过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
+		if (foodname.length() >100){
+			Toast.makeText(this, "[吃的啥]食物过多，不能超过100个文字", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
@@ -120,8 +120,8 @@ public class EditActivity extends Activity {
 			return false;
 		}
 
-		if (eatwhere.length() >30){
-			Toast.makeText(this, "[享用地点]文字过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
+		if (eatwhere.length() >100){
+			Toast.makeText(this, "[享用地点]文字过多，不能超过100个文字", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 

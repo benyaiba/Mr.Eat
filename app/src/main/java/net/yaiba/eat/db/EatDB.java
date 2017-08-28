@@ -51,13 +51,13 @@ public class EatDB extends SQLiteOpenHelper {
 
         //test date
         String sql2 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  'apppai',  'breakfast', '大润发',  '600gx2',	'2016-01-02'		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  'apppai',  'breakfast', '大润发',  '600gx2',	'2016-12-02'		);";
         db.execSQL(sql2);
         String sql3 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '春卷',  'lunch', '大润发',  '1包',	'2016-05-02'		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '春卷',  'lunch', '大润发',  '1包',	'2017-05-02'		);";
         db.execSQL(sql3);
         String sql4 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '巨无霸',  'lunch', '麦当劳',  '套餐',	'2016-05-02'		);";
+                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '巨无霸',  'lunch', '麦当劳',  '套餐',	'2017-06-02'		);";
         db.execSQL(sql4);
         String sql5 = "INSERT INTO  " + TABLE_NAME
                 + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '珍珍',  'before_dinner', '友宝',  '',	'2017-08-02'		);";
@@ -80,9 +80,11 @@ public class EatDB extends SQLiteOpenHelper {
 
     public Cursor getAll(String orderBy) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        Cursor cursor = db.query(true,TABLE_NAME, null, null, null, null, null, orderBy,"0,90");
         return cursor;
     }
+
+
 
     public Cursor getOne(long rowId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -166,6 +168,12 @@ public class EatDB extends SQLiteOpenHelper {
                 TABLE_NAME,
                 new String[] {RECORD_ID, EAT_WHAT, EAT_WHEN, EAT_WHERE, REMARK, CREATE_TIME},
                 where , null, null, null, orderby, null);
+        return cursor;
+    }
+
+    public Cursor getAllCreateTime() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(true,TABLE_NAME, new String[] {CREATE_TIME}, null, null, null, null, CREATE_TIME+" desc",null);
         return cursor;
     }
 

@@ -9,11 +9,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import net.yaiba.eat.db.EatDB;
 import net.yaiba.eat.utils.UpdateTask;
@@ -60,6 +64,8 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     private Button bn_filter_now;
 
     private int RECORD_ID = 0;
+    private  ArrayList<Category> makeDataListData = new ArrayList<Category>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,10 +157,13 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
             }
 
         });
+
+
     }
 
 
     public void setUpViews(String type, String value){
+        makeDataListData.clear();
         EatDB = new EatDB(this);
         if("all".equals(type)){
             mCursor = EatDB.getAll("create_time desc");
@@ -233,7 +242,93 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
             }
         });
 
+
+
+
+
+        ListView listView = (ListView) findViewById(R.id.listView1);
+        // 数据
+        ArrayList<Category> listData = makeData(listItem);
+
+        mCustomBaseAdapter = new CategoryAdapter(getBaseContext(), listData);
+
+        // 适配器与ListView绑定
+        listView.setAdapter(mCustomBaseAdapter);
+
+        //listView.setOnItemClickListener(new ItemClickListener());
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
+        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                //menu.setHeaderTitle("操作");
+                menu.add(0, 0, 0, "编辑");
+                menu.add(0, 1, 0, "删除");
+            }
+        });
+
+
     }
+
+    //生成一览数据
+    private  ArrayList<Category> makeData(ArrayList<HashMap<String, Object>> listItem){
+
+        Cursor mCursor = EatDB.getAllCreateTime();
+//        ArrayList<Category> listData = new ArrayList<Category>();
+//        Category categoryOne = new Category("路人甲");
+//        categoryOne.addItem("马三立");
+//        categoryOne.addItem("赵本山");
+//        categoryOne.addItem("郭德纲");
+//        categoryOne.addItem("周立波");
+//        listData.add(categoryOne);
+//
+//        Category categoryTwo = new Category("事件乙");
+//        categoryTwo.addItem("**贪污");
+//        categoryTwo.addItem("**照门");
+//        listData.add(categoryTwo);
+
+        //ArrayList<Category> makeDataListData = new ArrayList<Category>();
+        for(mCursor.moveToFirst();!mCursor.isAfterLast();mCursor.moveToNext()) {
+            int createTimeColumn = mCursor.getColumnIndex("create_time");
+            String createTime = mCursor.getString(createTimeColumn);
+            Log.v("createTime",createTime);
+
+            String[] data = createTime.split("-");
+            if(data.length==3){
+                createTime = data[1]+"/"+data[2]+"("+dayForWeek(createTime)+")";
+            }else {
+                createTime =  "-";
+            }
+            //生成header数据
+            Category categoryOne = new Category(createTime);
+
+            for (int i=0;i<listItem.size();i++){
+
+                String listItem_r_createTime = listItem.get(i).get("createTime").toString();
+                if(createTime.equals(listItem_r_createTime)){
+                    String listItem_r_id = listItem.get(i).get("id").toString();
+                    String listItem_r_foodName = listItem.get(i).get("foodName").toString();
+                    String listItem_r_eatTime = listItem.get(i).get("eatTime").toString();
+                    String listItem_r_eatWhere = listItem.get(i).get("eatWhere").toString();
+                    String strs = listItem_r_id+"_///_"+listItem_r_foodName+"_///_"+listItem_r_eatTime+"_///_"+listItem_r_eatWhere+"_///_"+listItem_r_createTime;
+                    //Log.v("debug",createTime+"/"+listItem_r_createTime);
+
+                    //生成items数据，根据日期add同一天下面的所有记录
+                    categoryOne.addItem(strs);
+                }
+            }
+            if(categoryOne.getItemCount() > 1){
+                makeDataListData.add(categoryOne);
+            }
+
+        }
+
+
+       return makeDataListData;
+    }
+
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -270,8 +365,48 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         //迁移到详细页面
 
         Intent mainIntent = new Intent(MainActivity.this,DetailActivity.class);
-        mCursor.moveToPosition(position);
-        RECORD_ID = mCursor.getInt(0);
+        Log.v("debug","position:"+position);
+        Log.v("debug","long id:"+id);
+
+
+        Adapter adapter=parent.getAdapter();
+        //Map<String,String> map=(Map<String, String>) adapter.getItem(position);
+
+        //String testid = makeDataListData.get(position).getItem(0);
+
+        //Log.v("debug","makeDataListData_0:"+makeDataListData.get(position).getItem(0));
+        //Log.v("debug","makeDataListData_1:"+makeDataListData.get(position).getItem(1));
+
+
+        int bigListCount = makeDataListData.size();
+        int checkPosition = 0;
+        outer: for(int i=0;i<bigListCount;i++){
+
+            int smallListCount = makeDataListData.get(i).getItemCount();
+            Log.v("debug","smallListCount"+i+":"+smallListCount);
+
+            for(int j=0;j<smallListCount;j++){
+
+                Log.v("debug","makeDataListData.get("+i+").getItem("+j+")"+i+":"+makeDataListData.get(i).getItem(j));
+
+                String[] infoArr =makeDataListData.get(i).getItem(j).split("_///_");
+                //if(infoArr.length>1){
+
+                //}
+                if(checkPosition ==position){
+                    RECORD_ID = Integer.valueOf(infoArr[0]);
+                    break outer;
+                }
+                checkPosition ++;
+            }
+
+        }
+
+
+//        mCursor.moveToPosition(position);
+//        RECORD_ID = mCursor.getInt(0);
+        //RECORD_ID = Integer.valueOf(testid);
+        Log.v("debug","RECORD_ID:"+RECORD_ID);
         mainIntent.putExtra("INT", RECORD_ID);
         startActivity(mainIntent);
         setResult(RESULT_OK, mainIntent);
@@ -427,6 +562,21 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         builder.setPositiveButton("确定", null);
         builder.create().show();
     }
+
+    private CategoryAdapter mCustomBaseAdapter;
+
+    private class ItemClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            Toast.makeText(getBaseContext(),  (String)mCustomBaseAdapter.getItem(position),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 
 
 }

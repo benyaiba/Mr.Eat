@@ -166,16 +166,16 @@ public class AddActivity extends Activity {
 			Toast.makeText(this, "[吃的啥]没填", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (foodname.length() >30){
-			Toast.makeText(this, "[吃的啥]食物过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
+		if (foodname.length() >100){
+			Toast.makeText(this, "[吃的啥]食物过多，不能超过100个文字", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (eattime.equals("")){
 			Toast.makeText(this, "[饭点儿]没有选择，请选择", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (eatwhere.length() >30){
-			Toast.makeText(this, "[享用地点]文字过多，不能超过30个文字", Toast.LENGTH_SHORT).show();
+		if (eatwhere.length() >100){
+			Toast.makeText(this, "[享用地点]文字过多，不能超过100个文字", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (createTime.length() > 14){

@@ -74,7 +74,7 @@
                  android:id="@+id/food_name"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:maxLength="30"
+                 android:maxLength="100"
                  android:ems="10" />
 
              <TextView
@@ -88,7 +88,7 @@
                  android:id="@+id/eat_where"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:maxLength="30"
+                 android:maxLength="100"
                  android:ems="10" />
 
             <TextView
