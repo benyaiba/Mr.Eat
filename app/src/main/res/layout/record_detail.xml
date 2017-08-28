@@ -84,6 +84,13 @@
                 android:textSize="22sp"
                 android:paddingBottom="10dp"/>
 
+            <Button
+                android:id="@+id/go_edit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:text="我要编辑" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

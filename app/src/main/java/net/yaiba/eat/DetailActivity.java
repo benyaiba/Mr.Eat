@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +37,19 @@ public class DetailActivity extends Activity {
 		RECORD_ID = this.getIntent().getIntExtra("INT", RECORD_ID);
 		Log.v("debug","(onCreate)RECORD_ID:"+RECORD_ID);
 		setUpViews();
+
+		Button bn_go_edit = (Button)findViewById(R.id.go_edit);
+		bn_go_edit.setOnClickListener(new View.OnClickListener(){
+			public void  onClick(View v)
+			{
+				//画面迁移到edit画面
+				Intent mainIntent = new Intent(DetailActivity.this,EditActivity.class);
+				mainIntent.putExtra("INT", RECORD_ID);
+				startActivity(mainIntent);
+				setResult(RESULT_OK, mainIntent);
+				finish();
+			}
+		});
 	}
 	
 	@Override

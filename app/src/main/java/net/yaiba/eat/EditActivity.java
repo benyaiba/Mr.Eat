@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -161,7 +162,9 @@ public class EditActivity extends Activity {
 		Remark = (EditText)findViewById(R.id.remark);
 
 		FoodName.setText(mCursor.getString(1));
-		EatTime.setSelection(getEatTimeIndex(mCursor.getString(2)),true);
+		Log.v("debug","mCursor.getString(2):"+mCursor.getString(2));
+		Log.v("debug","getEatTimeIndex(mCursor.getString(2)):"+(getEatTimeIndex(mCursor.getString(2))+1));
+		EatTime.setSelection(getEatTimeIndex(mCursor.getString(2))+1);
 		CreateTime.setText(mCursor.getString(5));
 		EatWhere.setText(mCursor.getString(3));
 		Remark.setText(mCursor.getString(4));
