@@ -24,6 +24,8 @@ import net.yaiba.eat.db.EatDB;
 
 import java.util.Calendar;
 
+import static net.yaiba.eat.utils.Custom.getEatTimeFromTime;
+import static net.yaiba.eat.utils.Custom.getEatTimeIndex;
 import static net.yaiba.eat.utils.Custom.getEatTimeValue;
 
 public class AddActivity extends Activity {
@@ -67,7 +69,11 @@ public class AddActivity extends Activity {
 		CreateTime = (EditText) findViewById(R.id.create_time);
 
 		eatTime = (Spinner)findViewById(R.id.eat_time);
-		eatTime.setSelection(1);//早餐
+
+
+
+
+		eatTime.setSelection(getEatTimeIndex(getEatTimeFromTime()));//早餐
 
 		setDateTime(true);
 

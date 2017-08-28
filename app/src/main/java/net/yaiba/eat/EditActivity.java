@@ -163,8 +163,8 @@ public class EditActivity extends Activity {
 
 		FoodName.setText(mCursor.getString(1));
 		Log.v("debug","mCursor.getString(2):"+mCursor.getString(2));
-		Log.v("debug","getEatTimeIndex(mCursor.getString(2)):"+(getEatTimeIndex(mCursor.getString(2))+1));
-		EatTime.setSelection(getEatTimeIndex(mCursor.getString(2))+1);
+		Log.v("debug","getEatTimeIndex(mCursor.getString(2)):"+(getEatTimeIndex(mCursor.getString(2))));
+		EatTime.setSelection(getEatTimeIndex(mCursor.getString(2)));
 		CreateTime.setText(mCursor.getString(5));
 		EatWhere.setText(mCursor.getString(3));
 		Remark.setText(mCursor.getString(4));

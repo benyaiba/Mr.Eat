@@ -87,13 +87,35 @@ public class Custom {
         int eatTimeValue = 0;
 
         switch(eatTimeVlue) {
-            case "breakfast": eatTimeValue = 0;break;
-            case "before_lunch": eatTimeValue = 1;break;
-            case "lunch": eatTimeValue = 2;break;
-            case "before_dinner": eatTimeValue = 3;break;
-            case "dinner": eatTimeValue = 4;break;
-            case "midnight_snack": eatTimeValue = 5;break;
+            case "breakfast": eatTimeValue = 1;break;
+            case "before_lunch": eatTimeValue = 2;break;
+            case "lunch": eatTimeValue = 3;break;
+            case "before_dinner": eatTimeValue = 4;break;
+            case "dinner": eatTimeValue = 5;break;
+            case "midnight_snack": eatTimeValue = 6;break;
             default: break;
+        }
+        return eatTimeValue;
+    }
+
+    public static  String getEatTimeFromTime(){
+        String eatTimeValue = "breakfast";
+
+        Calendar calendar = Calendar.getInstance();
+        int number = calendar.get(Calendar.HOUR_OF_DAY);
+
+        if(number>=3 && number <10){
+            eatTimeValue = "breakfast";
+        } else if(number>=10 && number <11){
+            eatTimeValue = "before_lunch";
+        } else if(number>=11 && number <14){
+            eatTimeValue = "lunch";
+        } else if(number>=14 && number <17){
+            eatTimeValue = "before_dinner";
+        } else if(number>=17 && number <22){
+            eatTimeValue = "dinner";
+        } else if(number>=22 || number <3){
+            eatTimeValue = "midnight_snack";
         }
         return eatTimeValue;
     }
