@@ -231,16 +231,16 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 
         RecordList.setAdapter(listItemAdapter);
         RecordList.setOnItemClickListener(this);
-        RecordList.setOnItemLongClickListener(this);
-        RecordList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                //menu.setHeaderTitle("操作");
-                menu.add(0, 0, 0, "编辑");
-                menu.add(0, 1, 0, "删除");
-            }
-        });
+//        RecordList.setOnItemLongClickListener(this);
+//        RecordList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//
+//            @Override
+//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                //menu.setHeaderTitle("操作");
+//                menu.add(0, 0, 0, "编辑");
+//                menu.add(0, 1, 0, "删除");
+//            }
+//        });
 
 
 
@@ -257,16 +257,16 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 
         //listView.setOnItemClickListener(new ItemClickListener());
         listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                //menu.setHeaderTitle("操作");
-                menu.add(0, 0, 0, "编辑");
-                menu.add(0, 1, 0, "删除");
-            }
-        });
+//        listView.setOnItemLongClickListener(this);
+//        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//
+//            @Override
+//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                //menu.setHeaderTitle("操作");
+//                menu.add(0, 0, 0, "编辑");
+//                menu.add(0, 1, 0, "删除");
+//            }
+//        });
 
 
     }
@@ -330,33 +330,33 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 
 
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        //setTitle("点击了长按菜单里面的第"+item.getItemId()+"个项目");
-        //Toast.makeText(this, "点击了长按菜单里面的第"+item.getItemId()+"个项目", Toast.LENGTH_SHORT).show();
-        super.onContextItemSelected(item);
-        switch (item.getItemId())
-        {
-            case 0:
-                go_update();
-                break;
-            case 1:
-                AlertDialog.Builder builder= new AlertDialog.Builder(this);
-                builder.setIcon(android.R.drawable.ic_dialog_info);
-                builder.setTitle("确认");
-                builder.setMessage("确定要删除这条记录吗？");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        delete();
-                        setUpViews("all",null);
-                    }
-                });
-                builder.setNegativeButton("取消", null);
-                builder.create().show();
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        //setTitle("点击了长按菜单里面的第"+item.getItemId()+"个项目");
+//        //Toast.makeText(this, "点击了长按菜单里面的第"+item.getItemId()+"个项目", Toast.LENGTH_SHORT).show();
+//        super.onContextItemSelected(item);
+//        switch (item.getItemId())
+//        {
+//            case 0:
+//                go_update();
+//                break;
+//            case 1:
+//                AlertDialog.Builder builder= new AlertDialog.Builder(this);
+//                builder.setIcon(android.R.drawable.ic_dialog_info);
+//                builder.setTitle("确认");
+//                builder.setMessage("确定要删除这条记录吗？");
+//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int whichButton) {
+//                        delete();
+//                        setUpViews("all",null);
+//                    }
+//                });
+//                builder.setNegativeButton("取消", null);
+//                builder.create().show();
+//                break;
+//        }
+//        return true;
+//    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -413,26 +413,26 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
         finish();
     }
 
-    @SuppressWarnings("deprecation")
-    public void delete(){
-        if (RECORD_ID == 0) {
-            return;
-        }
-        EatDB.delete(RECORD_ID);
-        mCursor.requery();
-        Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
-    }
-
-    public void go_update(){
-        //保存当前位置
-        //saveListViewPositionAndTop();
-        //画面迁移到edit画面
-        Intent mainIntent = new Intent(MainActivity.this,EditActivity.class);
-        mainIntent.putExtra("INT", RECORD_ID);
-        startActivity(mainIntent);
-        setResult(RESULT_OK, mainIntent);
-        finish();
-    }
+//    @SuppressWarnings("deprecation")
+//    public void delete(){
+//        if (RECORD_ID == 0) {
+//            return;
+//        }
+//        EatDB.delete(RECORD_ID);
+//        mCursor.requery();
+//        Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    public void go_update(){
+//        //保存当前位置
+//        //saveListViewPositionAndTop();
+//        //画面迁移到edit画面
+//        Intent mainIntent = new Intent(MainActivity.this,EditActivity.class);
+//        mainIntent.putExtra("INT", RECORD_ID);
+//        startActivity(mainIntent);
+//        setResult(RESULT_OK, mainIntent);
+//        finish();
+//    }
 
 
     /**

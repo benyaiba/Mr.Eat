@@ -180,7 +180,7 @@ public class DataManagementActivity extends Activity {
 	public void dataBakup(){
 		//Toast.makeText(this, "他很懒，备份程序还没做好", Toast.LENGTH_SHORT).show();
 		EatDB = new EatDB(this);
-		mCursor = EatDB.getAll(null);
+		mCursor = EatDB.getAllForBakup("create_time desc");
 
 		//检查目录并确定生成目录结构
 		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);

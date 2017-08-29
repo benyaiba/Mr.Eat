@@ -1,6 +1,8 @@
 package net.yaiba.eat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -50,6 +52,30 @@ public class DetailActivity extends Activity {
 				finish();
 			}
 		});
+
+
+		Button bn_go_del = (Button)findViewById(R.id.go_del);
+		bn_go_del.setOnClickListener(new View.OnClickListener(){
+			public void  onClick(View v)
+			{
+				AlertDialog.Builder builder= new AlertDialog.Builder(DetailActivity.this);
+				builder.setIcon(android.R.drawable.ic_dialog_info);
+				builder.setTitle("确认");
+				builder.setMessage("确定要删除这条记录吗？");
+				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						delete();
+						Intent mainIntent = new Intent(DetailActivity.this,MainActivity.class);
+						startActivity(mainIntent);
+						setResult(RESULT_OK, mainIntent);
+						finish();
+
+					}
+				});
+				builder.setNegativeButton("取消", null);
+				builder.create().show();
+			}
+		});
 	}
 	
 	@Override
@@ -81,6 +107,15 @@ public class DetailActivity extends Activity {
         EatWhere.setText(mCursor.getString(3));
 		Remark.setText(mCursor.getString(4));
 		CreateTime.setText(mCursor.getString(5));
+	}
+
+	public void delete(){
+		if (RECORD_ID == 0) {
+			return;
+		}
+		EatDB.delete(RECORD_ID);
+		mCursor.requery();
+		Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
 	}
 
 }

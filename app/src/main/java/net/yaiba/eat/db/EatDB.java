@@ -48,26 +48,6 @@ public class EatDB extends SQLiteOpenHelper {
                 + REMARK +" TEXT NULL , "
                 + CREATE_TIME +" NVARCHAR(100) NOT NULL);";
         db.execSQL(sql);
-
-        //test date
-        String sql2 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  'apppai',  'breakfast', '大润发',  '600gx2',	'2016-12-02'		);";
-        db.execSQL(sql2);
-        String sql3 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '春卷',  'lunch', '大润发',  '1包',	'2017-05-02'		);";
-        db.execSQL(sql3);
-        String sql4 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '巨无霸',  'lunch', '麦当劳',  '套餐',	'2017-06-02'		);";
-        db.execSQL(sql4);
-        String sql5 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '珍珍',  'before_dinner', '友宝',  '',	'2017-08-02'		);";
-        db.execSQL(sql5);
-        String sql6 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '老口味酸奶',  'before_dinner', '',  '',	'2017-08-02'		);";
-        db.execSQL(sql6);
-        String sql7 = "INSERT INTO  " + TABLE_NAME
-                + " (`id` ,`food_name` ,`eat_time`,`eat_where` ,`remark` ,`create_time`)		VALUES (NULL ,  '炸酱面',  'dinner', '',  '',	'2017-08-01'		);";
-        db.execSQL(sql7);
     }
 
     @Override
@@ -81,6 +61,12 @@ public class EatDB extends SQLiteOpenHelper {
     public Cursor getAll(String orderBy) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(true,TABLE_NAME, null, null, null, null, null, orderBy,"0,90");
+        return cursor;
+    }
+
+    public Cursor getAllForBakup(String orderBy) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
         return cursor;
     }
 
