@@ -186,7 +186,7 @@ public class DataManagementActivity extends Activity {
 		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
 		String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "//" + FILE_DIR_NAME;
 		Date dt = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmm_ss");
 		//String fileName = fileNamePre + sdf.format(dt)+ fileNameSuff;
 
 		//showAboutDialog("准备","正在处理未加密数据");
