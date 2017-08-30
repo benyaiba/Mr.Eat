@@ -247,6 +247,10 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 
 
         ListView listView = (ListView) findViewById(R.id.listView1);
+
+        int listCount = listItem.size();
+        TextView ListCount = (TextView)findViewById(R.id.list_counts);
+        ListCount.setText(listCount+"条记录");
         // 数据
         ArrayList<Category> listData = makeData(listItem);
 
