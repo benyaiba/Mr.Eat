@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -8,6 +12,10 @@ android {
         applicationId "net.yaiba.eat"
         minSdkVersion 21
         targetSdkVersion 25
+
+        versionCode 1
+        versionName "0.0.5.4"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,9 +32,9 @@ android {
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
 
                 //读取AndroidManifest.xml文件中的versionName属性，用于生成发布文件名
-                def androidManifest = new XmlSlurper().parse("app\\src\\main\\AndroidManifest.xml")
 
-                def fileName = outputFile.name.replace("app", "${defaultConfig.applicationId}_${androidManifest['@android:versionName']}")
+                def newName = "${defaultConfig.applicationId }-${defaultConfig.versionName}-${releaseTime() }"
+                def fileName = outputFile.name.replace("app",newName)
                 output.outputFile = new File(outputFile.parent, fileName)
             }
         }
