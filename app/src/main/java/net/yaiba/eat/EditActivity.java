@@ -34,6 +34,9 @@ public class EditActivity extends Activity {
 	private EditText EatWhere;
 	private EditText Remark;
 
+	private TextView tv_qh;
+	private TextView tv_qb;
+
 	private EditText showDate = null;
 	private int mYear;
 	private int mMonth;
@@ -63,6 +66,30 @@ public class EditActivity extends Activity {
 				}
 			}
 		});
+
+		EatWhere = (EditText)findViewById(R.id.eat_where);
+
+		tv_qh = (TextView)findViewById(R.id.quick_home);
+		tv_qh.setOnClickListener(new View.OnClickListener(){
+			public void  onClick(View v)
+			{
+				EatWhere.setText("家");
+			}
+		});
+
+		tv_qb = (TextView)findViewById(R.id.quick_bussiness);
+		tv_qb.setOnClickListener(new View.OnClickListener(){
+			public void  onClick(View v)
+			{
+				EatWhere.setText("单位");
+			}
+		});
+
+
+
+
+
+
 	}
 
 	public void getDate(View v) {
