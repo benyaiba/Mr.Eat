@@ -34,7 +34,8 @@
     <string name="info_nachide">哪吃的</string>
     <string name="info_beizhu">备注</string>
     <string name="info_xiangyongriqi">享用日期</string>
-    <string name="info_shezhishijian">设置日期</string>
+    <string name="info_shezhishijian">选择</string>
+    <string name="info_ieated">我吃过以下食品...</string>
 
     <string name="record_list_search">查找&#8230;</string>
     <string name="title_activity_list">ListActivity</string>
@@ -71,7 +72,8 @@
     <string name="menu_warming_have_unencode_file">警告：检测到目录中包含未加密的备份文件\n为了安全起见请备份后删除</string>
 
     <string name="what_updated">
-        0.0.5.0\n一览画面显示调整 #8
+        0.0.5.9\n食品名称增加了常用选项 #23
+        \n\n0.0.5.0\n一览画面显示调整 #8
         \n\n0.0.4.0\n在一览页面增加对数据过滤功能 #3
         \n\n0.0.3.0\n个性化调整 #5
         \n\n0.0.2.0\n数据备份与恢复，版本检查更新 #4

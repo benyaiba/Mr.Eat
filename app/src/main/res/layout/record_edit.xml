@@ -43,10 +43,11 @@
                     android:ems="10" />
 
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
                     android:onClick="getDate"
-                    android:text="@string/info_shezhishijian" />
+                    android:text="@string/info_shezhishijian"
+                    android:textColor="@color/gray" />
 
             </LinearLayout>
 
@@ -72,14 +73,6 @@
                             android:id="@+id/eat_time"
                             android:entries="@array/eat_time" />
                 </LinearLayout>
-                <Button
-                    android:id="@+id/add"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="保存" />
 
             </LinearLayout>
 
@@ -89,12 +82,26 @@
                 android:textSize="12sp"
                 android:text="@string/info_chidesha" />
 
-            <EditText
-                android:id="@+id/food_name"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="100"
-                android:paddingBottom="10dp" />
+                android:weightSum="1">
+                <EditText
+                    android:id="@+id/food_name"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="100"
+                    android:inputType="textMultiLine"
+                    android:ems="10" />
+
+                <Button
+                    android:id="@+id/food_name_frequent"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:textColor="@color/gray"
+                    android:text="常用" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -149,12 +156,28 @@
                 android:textSize="12sp"
                 android:text="@string/info_beizhu" />
 
-            <EditText
-                android:id="@+id/remark"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="500"
-                android:paddingBottom="10dp"/>
+                android:weightSum="1">
+
+                <EditText
+                    android:id="@+id/remark"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="500"
+                    android:inputType="textMultiLine" />
+                <Button
+                    android:id="@+id/add"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="2dp"
+                    android:text="保存" />
+
+            </LinearLayout>
 
 
 

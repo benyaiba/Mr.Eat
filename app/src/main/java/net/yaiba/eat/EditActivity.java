@@ -1,7 +1,10 @@
 package net.yaiba.eat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,7 +23,15 @@ import android.widget.Toast;
 
 import net.yaiba.eat.db.EatDB;
 
+import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import static net.yaiba.eat.utils.Custom.getEatTimeIndex;
 import static net.yaiba.eat.utils.Custom.getEatTimeValue;
@@ -43,6 +54,11 @@ public class EditActivity extends Activity {
 	private int mDay;
 
 	private int RECORD_ID = 0;
+
+	private final static int DIALOG=1;
+	boolean[] foodNameClickFlags=null;//初始复选情况
+	String[] foodNameitems=null;
+	String foodNameSelectedResults = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +102,155 @@ public class EditActivity extends Activity {
 		});
 
 
-
+		Button button = (Button) findViewById(R.id.food_name_frequent);
+		button.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+				// 显示对话框
+				showDialog(1);
+			}
+		});
 
 
 
 	}
+
+
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog = null;
+		switch (id) {
+			case 1:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("我吃过以下食品...");
+
+				Map<String, Integer> foodsStringMap = new HashMap<String, Integer>();
+				EatDB = new EatDB(EditActivity.this);
+				mCursor = EatDB.getAllFoodName();
+				for(mCursor.moveToFirst();!mCursor.isAfterLast();mCursor.moveToNext()) {
+					String foodName = mCursor.getString(mCursor.getColumnIndex("food_name"));
+					//Log.v("debug",foodName);
+
+					foodName = foodName.replaceAll(" ","");//替换空格
+					foodName = foodName.replaceAll("　","");//替换空格
+					foodName = foodName.replaceAll("，",",");//全角逗号替换成半角逗号
+					foodName = foodName.replaceAll("[',']+", ",");//将一个或多个半角逗号变成一个半角逗号
+					String[] foodNamesTmp = foodName.split(",");
+
+					for (int i = 0; i < foodNamesTmp.length; i++) {
+						foodName = foodNamesTmp[i];
+						if(foodsStringMap.containsKey(foodName)){
+							foodsStringMap.put(foodName, foodsStringMap.get(foodName)+1);
+						} else {
+							foodsStringMap.put(foodName, 1);
+						}
+					}
+				}
+
+				List<Map.Entry<String, Integer>> foodInfosMap =	new ArrayList<Map.Entry<String, Integer>>(foodsStringMap.entrySet());
+
+				//对map排序
+				Collections.sort(foodInfosMap, new Comparator<Map.Entry<String, Integer>>() {
+					public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+						//升序，按照名称升序排序
+						//return (o1.getKey()).compareTo(o2.getKey());
+						//降序，按照使用次数降序排序
+						//return (o2.getValue()).compareTo(o1.getValue());
+						String name1=o1.getKey();
+						String name2=o2.getKey();
+						Collator instance = Collator.getInstance(Locale.CHINA);
+						return instance.compare(name1, name2);
+
+
+					}
+				});
+
+				//每次点击时清空选择项
+				foodNameClickFlags=null;
+				foodNameSelectedResults = "";
+
+				if(!foodInfosMap.equals(null)){
+					foodNameitems = new String [foodInfosMap.size()];
+					foodNameClickFlags = new boolean [foodInfosMap.size()];
+				}
+
+				//Log.v("debug","=====map info===sort===");
+				int foodNameIndex = 0;
+				for(Map.Entry<String,Integer> mapping:foodInfosMap){
+					//Log.v("debug",mapping.getKey()+":"+mapping.getValue().toString());
+					if(mapping.getValue()>=5){
+						foodNameitems[foodNameIndex] = mapping.getKey()+" ("+mapping.getValue()+"次)";
+					} else {
+						foodNameitems[foodNameIndex] = mapping.getKey();
+					}
+
+					foodNameClickFlags[foodNameIndex] = false;//设置默认选中状态
+
+					String fn = FoodName.getText().toString();
+					foodNameSelectedResults = fn;
+
+					fn = fn.replaceAll(" ","");//替换空格
+					fn = fn.replaceAll("　","");//替换空格
+					fn = fn.replaceAll("，",",");//全角逗号替换成半角逗号
+					fn = fn.replaceAll("[',']+", ",");//将一个或多个半角逗号变成一个半角逗号
+					String[] foodNamesTmp = fn.split(",");
+
+
+					for(int i=0;i<foodNamesTmp.length;i++){
+						if(foodNamesTmp[i].equals(mapping.getKey())){
+							foodNameClickFlags[foodNameIndex] = true;
+							break;
+						}
+					}
+
+
+					//Log.v("debug","view->"+mapping.getKey()+":"+mapping.getValue().toString());
+					foodNameIndex++;
+				}
+				//Log.v("debug","=====items===");
+				//Log.v("debug",foodNameitems.length+"");
+				builder.setMultiChoiceItems(foodNameitems, foodNameClickFlags, new DialogInterface.OnMultiChoiceClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+						foodNameClickFlags[which]=isChecked;
+						foodNameSelectedResults = "";
+						for (int i = 0; i < foodNameClickFlags.length; i++) {
+							if(foodNameClickFlags[i])
+							{
+								String n = foodNameitems[i];
+								String [] m = n.split(" ");
+								foodNameSelectedResults=foodNameSelectedResults + m[0]+",";
+							}
+						}
+						//去掉结尾的逗号
+						if(!foodNameSelectedResults.isEmpty()){
+							foodNameSelectedResults = foodNameSelectedResults.substring(0,foodNameSelectedResults.length()-1);
+						}
+
+						//Log.v("debug","我点了！which:"+which+",name:"+foodNameitems[which]);
+					}
+				});
+				builder.setPositiveButton("就选这些（点击后，之前填写的将被清空）", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//选择的食物名称赋值到前台文本框中
+						FoodName.setText(foodNameSelectedResults);
+					}
+				});
+				dialog = builder.create();
+				break;
+
+			default:
+				break;
+		}
+
+		return dialog;
+	}
+
+
+
+
 
 	public void getDate(View v) {
 
