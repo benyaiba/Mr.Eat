@@ -59,6 +59,10 @@ public class EditActivity extends Activity {
 	boolean[] foodNameClickFlags=null;//初始复选情况
 	String[] foodNameitems=null;
 	String foodNameSelectedResults = "";
+
+	boolean[] eatWhereClickFlags=null;//初始复选情况
+	String[] eatWhereitems=null;
+	String eatWhereSelectedResults = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,25 +89,8 @@ public class EditActivity extends Activity {
 
 		EatWhere = (EditText)findViewById(R.id.eat_where);
 
-		tv_qh = (TextView)findViewById(R.id.quick_home);
-		tv_qh.setOnClickListener(new View.OnClickListener(){
-			public void  onClick(View v)
-			{
-				EatWhere.setText("家");
-			}
-		});
-
-		tv_qb = (TextView)findViewById(R.id.quick_bussiness);
-		tv_qb.setOnClickListener(new View.OnClickListener(){
-			public void  onClick(View v)
-			{
-				EatWhere.setText("单位");
-			}
-		});
-
-
-		Button button = (Button) findViewById(R.id.food_name_frequent);
-		button.setOnClickListener(new View.OnClickListener() {
+		Button bt_food_name_frequent = (Button) findViewById(R.id.food_name_frequent);
+		bt_food_name_frequent.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				// 显示对话框
@@ -111,10 +98,18 @@ public class EditActivity extends Activity {
 			}
 		});
 
+		Button bt_eat_where_frequent = (Button) findViewById(R.id.eat_where_frequent);
+		bt_eat_where_frequent.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+				// 显示对话框
+				showDialog(2);
+			}
+		});
+
 
 
 	}
-
 
 
 	@Override
@@ -239,6 +234,126 @@ public class EditActivity extends Activity {
 					}
 				});
 				dialog = builder.create();
+				break;
+
+			case 2:
+				AlertDialog.Builder eatWhereBbuilder = new AlertDialog.Builder(this);
+				eatWhereBbuilder.setTitle("我去过以下地方...");
+
+				Map<String, Integer> whereStringMap = new HashMap<String, Integer>();
+				EatDB = new EatDB(EditActivity.this);
+				mCursor = EatDB.getAllEatWhere();
+				for(mCursor.moveToFirst();!mCursor.isAfterLast();mCursor.moveToNext()) {
+					String eatWhere = mCursor.getString(mCursor.getColumnIndex("eat_where"));
+					//Log.v("debug",foodName);
+
+					eatWhere = eatWhere.replaceAll(" ","");//替换空格
+					eatWhere = eatWhere.replaceAll("　","");//替换空格
+					eatWhere = eatWhere.replaceAll("，",",");//全角逗号替换成半角逗号
+					eatWhere = eatWhere.replaceAll("[',']+", ",");//将一个或多个半角逗号变成一个半角逗号
+					String[] foodNamesTmp = eatWhere.split(",");
+
+					for (int i = 0; i < foodNamesTmp.length; i++) {
+						eatWhere = foodNamesTmp[i];
+						if(!eatWhere.isEmpty()){
+							if(whereStringMap.containsKey(eatWhere)){
+								whereStringMap.put(eatWhere, whereStringMap.get(eatWhere)+1);
+							} else {
+								whereStringMap.put(eatWhere, 1);
+							}
+						}
+
+					}
+				}
+
+				List<Map.Entry<String, Integer>> eatWhereInfosMap =	new ArrayList<Map.Entry<String, Integer>>(whereStringMap.entrySet());
+
+				//对map排序
+				Collections.sort(eatWhereInfosMap, new Comparator<Map.Entry<String, Integer>>() {
+					public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+						//升序，按照名称升序排序
+						//return (o1.getKey()).compareTo(o2.getKey());
+						//降序，按照使用次数降序排序
+						//return (o2.getValue()).compareTo(o1.getValue());
+						String name1=o1.getKey();
+						String name2=o2.getKey();
+						Collator instance = Collator.getInstance(Locale.CHINA);
+						return instance.compare(name1, name2);
+
+
+					}
+				});
+
+				//每次点击时清空选择项
+				eatWhereClickFlags=null;
+
+				if(!eatWhereInfosMap.equals(null)){
+					eatWhereitems = new String [eatWhereInfosMap.size()];
+					eatWhereClickFlags = new boolean [eatWhereInfosMap.size()];
+				}
+
+				//Log.v("debug","=====map info===sort===");
+				int eatWhereIndex = 0;
+				for(Map.Entry<String,Integer> mapping:eatWhereInfosMap){
+					//Log.v("debug",mapping.getKey()+":"+mapping.getValue().toString());
+					if(mapping.getValue()>=5){
+						eatWhereitems[eatWhereIndex] = mapping.getKey()+" ("+mapping.getValue()+"次)";
+					} else {
+						eatWhereitems[eatWhereIndex] = mapping.getKey();
+					}
+
+					eatWhereClickFlags[eatWhereIndex] = false;//设置默认选中状态
+					//Log.v("debug","view->"+mapping.getKey()+":"+mapping.getValue().toString());
+
+                    String ew = EatWhere.getText().toString();
+
+                    foodNameSelectedResults = ew;
+                    ew = ew.replaceAll(" ","");//替换空格
+                    ew = ew.replaceAll("　","");//替换空格
+                    ew = ew.replaceAll("，",",");//全角逗号替换成半角逗号
+                    ew = ew.replaceAll("[',']+", ",");//将一个或多个半角逗号变成一个半角逗号
+                    String[] eatWhereTmp = ew.split(",");
+
+                    for(int i=0;i<eatWhereTmp.length;i++){
+                        if(eatWhereTmp[i].equals(mapping.getKey())){
+                            eatWhereClickFlags[eatWhereIndex] = true;
+                            break;
+                        }
+                    }
+
+					eatWhereIndex++;
+				}
+				//Log.v("debug","=====items===");
+				//Log.v("debug",foodNameitems.length+"");
+				eatWhereBbuilder.setMultiChoiceItems(eatWhereitems, eatWhereClickFlags, new DialogInterface.OnMultiChoiceClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+						eatWhereClickFlags[which]=isChecked;
+						eatWhereSelectedResults = "";
+						for (int i = 0; i < eatWhereClickFlags.length; i++) {
+							if(eatWhereClickFlags[i])
+							{
+								String n = eatWhereitems[i];
+								String [] m = n.split(" ");
+								eatWhereSelectedResults=eatWhereSelectedResults + m[0]+",";
+							}
+						}
+						//去掉结尾的逗号
+						if(!eatWhereSelectedResults.isEmpty()){
+							eatWhereSelectedResults = eatWhereSelectedResults.substring(0,eatWhereSelectedResults.length()-1);
+						}
+
+						//Log.v("debug","我点了！which:"+which+",name:"+foodNameitems[which]);
+					}
+				});
+				eatWhereBbuilder.setPositiveButton("就在这了！（点击后，之前填写的将被清空）", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//选择的地点赋值到前台文本框中
+						EatWhere.setText(eatWhereSelectedResults);
+					}
+				});
+				dialog = eatWhereBbuilder.create();
 				break;
 
 			default:

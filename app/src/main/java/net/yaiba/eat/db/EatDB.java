@@ -168,6 +168,11 @@ public class EatDB extends SQLiteOpenHelper {
         Cursor cursor = db.query(false,TABLE_NAME, new String[] {EAT_WHAT}, null, null, null, null, null ,null);
         return cursor;
     }
+    public Cursor getAllEatWhere() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(false,TABLE_NAME, new String[] {EAT_WHERE}, null, null, null, null, null ,null);
+        return cursor;
+    }
 
     public long insert(String food_name,String eat_time,String eat_where,String remark,String create_time){
         SQLiteDatabase db = this.getWritableDatabase();
