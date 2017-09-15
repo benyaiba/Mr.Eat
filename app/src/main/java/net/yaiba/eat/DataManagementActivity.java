@@ -240,7 +240,7 @@ public class DataManagementActivity extends Activity {
 
  	public void setUpViews(){
 		EatDB = new EatDB(this);
-		mCursor = EatDB.getOne(RECORD_ID);
+		mCursor = EatDB.getRecordInfo(RECORD_ID);
 
 	}
 

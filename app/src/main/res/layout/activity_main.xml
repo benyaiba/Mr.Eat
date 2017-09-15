@@ -124,7 +124,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="190sp"
+                    android:layout_width="50sp"
                     android:layout_height="wrap_content"
                     android:text="@string/info_chidesha"
                     android:textSize="15sp"
@@ -132,10 +132,12 @@
 
                 <TextView
                     android:id="@+id/list_counts"
-                    android:layout_width="90sp"
+                    android:layout_width="210sp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="0dp"
+                    android:layout_marginRight="30dp"
                     android:textSize="12sp"
+                    android:gravity="center_vertical|right"
+                    android:text="12"
                     android:textColor="@color/silver"/>
 
                 <!--<TextView-->

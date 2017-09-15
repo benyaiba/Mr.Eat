@@ -27,7 +27,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +37,7 @@ import java.util.Map;
 import net.yaiba.eat.db.EatDB;
 import net.yaiba.eat.utils.UpdateTask;
 
+import static android.R.attr.data;
 import static net.yaiba.eat.utils.Custom.*;
 //import net.yaiba.eat.data.ListViewData;
 
@@ -70,7 +73,7 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpViews("all",null);
+        setUpViews("listInit",null);
 
         Button bn_go_add = (Button)findViewById(R.id.go_add);
         bn_go_add.setOnClickListener(new View.OnClickListener(){
@@ -98,7 +101,11 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
                     isButton = true;
                     bn_filters.setText("+");
                     SearchInput = (EditText)findViewById(R.id.searchInput);
-                    setUpViews("search",SearchInput.getText().toString().trim());
+                    if(SearchInput.getText().toString().trim().isEmpty()){
+                        setUpViews("listInit",null);
+                    } else{
+                        setUpViews("search",SearchInput.getText().toString().trim());
+                    }
                 }
             }
         });
@@ -142,7 +149,7 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
                         e.printStackTrace();
                     }
                 } else {
-                    setUpViews("all",null);
+                    setUpViews("listInit",null);
                 }
             }
 
@@ -165,8 +172,8 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
     public void setUpViews(String type, String value){
         makeDataListData.clear();
         EatDB = new EatDB(this);
-        if("all".equals(type)){
-            mCursor = EatDB.getAll("create_time desc");
+        if("listInit".equals(type)){
+            mCursor = EatDB.getDay30("create_time desc");
         } else if("search".equals(type)) {
 
             bn_filters = (Button)findViewById(R.id.filters);
@@ -247,10 +254,29 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 
 
         ListView listView = (ListView) findViewById(R.id.listView1);
-
-        int listCount = listItem.size();
         TextView ListCount = (TextView)findViewById(R.id.list_counts);
-        ListCount.setText(listCount+"条记录");
+        bn_filters = (Button)findViewById(R.id.filters);
+        if(bn_filters.getText().equals("-")){
+            //“-”号时：当前搜索结果共xx条记录
+            int listCount = listItem.size();
+            ListCount.setText("当前搜索结果共"+listCount+"条记录");
+        } else {
+            //“+”号时：您已经使用了xx天，默认显示最近30天的记录
+            Cursor dCursor = EatDB.getStartUsageDay();
+            for(dCursor.moveToFirst();!dCursor.isAfterLast();dCursor.moveToNext()) {
+                int createTimeColumn = dCursor.getColumnIndex("create_time");
+                String createTime = dCursor.getString(createTimeColumn);
+                int daysDiff = 0;
+                try {
+                    daysDiff = getDiffDays(getStringToDate(createTime),new Date());
+                } catch (ParseException e) {
+                    Log.v("debug","getDiffDays error!!");
+                }
+                ListCount.setText("最近30天的记录/累计"+daysDiff+"天");
+            }
+        }
+
+
         // 数据
         ArrayList<Category> listData = makeData(listItem);
 
@@ -352,7 +378,7 @@ public class MainActivity extends Activity implements  AdapterView.OnItemClickLi
 //                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 //                    public void onClick(DialogInterface dialog, int whichButton) {
 //                        delete();
-//                        setUpViews("all",null);
+//                        setUpViews("listInit",null);
 //                    }
 //                });
 //                builder.setNegativeButton("取消", null);

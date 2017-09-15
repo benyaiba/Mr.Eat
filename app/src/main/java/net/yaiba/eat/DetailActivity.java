@@ -94,7 +94,7 @@ public class DetailActivity extends Activity {
  	public void setUpViews(){
 		Log.v("debug","(setUpViews)RECORD_ID:"+RECORD_ID);
 		EatDB = new EatDB(this);
-		mCursor = EatDB.getOne(RECORD_ID);
+		mCursor = EatDB.getRecordInfo(RECORD_ID);
 		 
 		FoodName = (TextView)findViewById(R.id.food_name);
 		EatTime = (TextView)findViewById(R.id.eat_time);

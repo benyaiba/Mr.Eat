@@ -455,7 +455,7 @@ public class EditActivity extends Activity {
 	
 	public void setUpViews(){
 		EatDB = new EatDB(this);
-		mCursor = EatDB.getOne(RECORD_ID);
+		mCursor = EatDB.getRecordInfo(RECORD_ID);
 
 		FoodName = (EditText)findViewById(R.id.food_name);
 		EatTime = (Spinner)findViewById(R.id.eat_time);

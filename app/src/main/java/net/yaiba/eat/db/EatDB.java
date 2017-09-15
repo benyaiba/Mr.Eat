@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Date;
+
 import static net.yaiba.eat.utils.Custom.getBeginDayOfMonth;
 import static net.yaiba.eat.utils.Custom.getBeginDayOfSixMonth;
 import static net.yaiba.eat.utils.Custom.getBeginDayOfThreeMonth;
@@ -18,6 +20,7 @@ import static net.yaiba.eat.utils.Custom.getEatTimeValue;
 import static net.yaiba.eat.utils.Custom.getEndDayOfMonth;
 import static net.yaiba.eat.utils.Custom.getEndDayOfWeek;
 import static net.yaiba.eat.utils.Custom.getEndDayOfYear;
+import static net.yaiba.eat.utils.Custom.getFrontDay;
 
 
 public class EatDB extends SQLiteOpenHelper {
@@ -60,7 +63,27 @@ public class EatDB extends SQLiteOpenHelper {
 
     public Cursor getAll(String orderBy) {
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        return cursor;
+    }
+
+    public Cursor getLimit90(String orderBy) {
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(true,TABLE_NAME, null, null, null, null, null, orderBy,"0,90");
+        return cursor;
+    }
+
+    public Cursor getDay30(String orderBy) {
+
+        String start_date = getDateToString(getFrontDay(new Date(),30));
+        String end_date = getDateToString(new Date());
+
+        String sql_create_time = "( "+CREATE_TIME+">='" +start_date +"' and " + CREATE_TIME + "<='" + end_date +"' )";
+        Log.v("debug",sql_create_time);
+        String where = "";
+        where = sql_create_time;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(true,TABLE_NAME, null, where , null, null, null, orderBy, null);
         return cursor;
     }
 
@@ -71,10 +94,18 @@ public class EatDB extends SQLiteOpenHelper {
     }
 
 
-
-    public Cursor getOne(long rowId) {
+    public Cursor getRecordInfo(long rowId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(true, TABLE_NAME, new String[] {RECORD_ID, EAT_WHAT, EAT_WHEN, EAT_WHERE, REMARK, CREATE_TIME}, RECORD_ID + "=" + rowId, null, null, null, null, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getStartUsageDay() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(true, TABLE_NAME, new String[] {CREATE_TIME}, null, null, null, null, CREATE_TIME+" asc", "0,1");
         if(cursor != null) {
             cursor.moveToFirst();
         }

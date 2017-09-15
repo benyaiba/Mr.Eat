@@ -16,6 +16,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import static android.R.attr.format;
 
 public class Custom {
@@ -423,6 +426,11 @@ public class Custom {
     public static String getDateToString(Date date){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
+    }
+
+    public static Date getStringToDate(String string) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(string);
     }
 
 
