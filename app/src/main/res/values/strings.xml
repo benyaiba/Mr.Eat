@@ -63,7 +63,7 @@
 
     <string name="data_bakup">数据备份</string>
     <string name="data_bakup_description">数据将以文件形式存储在您的设备中</string>
-    <string name="data_bakup_description_dir">/eat/</string>
+    <string name="data_bakup_description_dir">/yaiba.net/Mr.Eat/</string>
     <string name="data_recover">数据恢复</string>
     <string name="data_recover_description">程序会读取指定目录中的备份文件</string>
     <string name="data_mess_import">批量导入</string>
@@ -72,12 +72,7 @@
     <string name="menu_warming_have_unencode_file">警告：检测到目录中包含未加密的备份文件\n为了安全起见请备份后删除</string>
 
     <string name="what_updated">
-        0.0.5.9\n食品名称增加了常用选项 #23
-        \n\n0.0.5.0\n一览画面显示调整 #8
-        \n\n0.0.4.0\n在一览页面增加对数据过滤功能 #3
-        \n\n0.0.3.0\n个性化调整 #5
-        \n\n0.0.2.0\n数据备份与恢复，版本检查更新 #4
-        \n\n0.0.1.0\n基础功能开发 #2
+        0.0.6.2\n修改导入导出文件生成的位置 \n#27变更备份文件时生成文件的方法#14 \n参考Mr.Timiup更新按钮样式 用户体验#26
     </string>
     <string name="partners">\@石头大风吹</string>
     <string name="about_eat">

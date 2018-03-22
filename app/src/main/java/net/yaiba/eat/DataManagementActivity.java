@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,8 +41,14 @@ public class DataManagementActivity extends Activity {
 	private int RECORD_ID = 0;
 	private int selectBakupFileIndex = 0;
 	private String[] bakFileArray ;
-	private String FILE_DIR_NAME = "eat";
+	private String FILE_DIR_NAME = "yaiba.net//Mr.Eat";
 	private String fileNameSuff = ".xml";
+
+	//检测是否有写的权限用
+	private static final int REQUEST_EXTERNAL_STORAGE = 1;
+	private static String[] PERMISSIONS_STORAGE = {
+			"android.permission.READ_EXTERNAL_STORAGE",
+			"android.permission.WRITE_EXTERNAL_STORAGE" };
 
 	
 	@Override
@@ -48,6 +56,9 @@ public class DataManagementActivity extends Activity {
 
 		EatDB = new EatDB(this);
 		super.onCreate(savedInstanceState);
+
+		//检测是否有写的权限用
+		verifyStoragePermissions(DataManagementActivity.this);
 
 
 		//判断文件名中是否包含20170216020803!!!!!.xml 这种文件，如果目录中包含这种文件，将在画面最下方以红色文字提示。
@@ -368,7 +379,23 @@ public class DataManagementActivity extends Activity {
  			isXMLFile = false;
  		 }
  		 return isXMLFile;
- 	} 
+ 	}
+
+
+	//检测是否有写的权限用
+	public static void verifyStoragePermissions(Activity activity) {
+
+		try {
+			//检测是否有写的权限
+			int permission = ActivityCompat.checkSelfPermission(activity,"android.permission.WRITE_EXTERNAL_STORAGE");
+			if (permission != PackageManager.PERMISSION_GRANTED) {
+				// 没有写的权限，去申请写的权限，会弹出对话框
+				ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
  	
 
 

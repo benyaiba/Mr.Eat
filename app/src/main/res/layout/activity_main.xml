@@ -17,23 +17,26 @@
             android:layout_height="60dp"
             android:padding="5dp">
 
-            <EditText
-                android:id="@+id/searchInput"
-                android:layout_width="210dp"
-                android:layout_height="50dp"
-                android:hint="@string/record_list_search" />
-
             <Button
                 android:id="@+id/filters"
                 android:layout_width="30dp"
                 android:layout_height="50dp"
+                android:background="@drawable/btn_nor_down_grey"
                 android:text="+" />
+
+            <EditText
+                android:id="@+id/searchInput"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:hint="@string/record_list_search" />
 
             <Button
                 android:id="@+id/go_add"
-                android:layout_width="120dp"
+                android:layout_width="110dp"
                 android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
                 android:textSize="17dp"
+                android:background="@drawable/btn_nor_down_green"
                 android:text="添加记录" />
         </LinearLayout>
 
@@ -80,6 +83,7 @@
                 android:id="@+id/filter_now"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/btn_nor_down_grey"
                 android:text="筛选"
                 android:textSize="17dp" />
         </LinearLayout>

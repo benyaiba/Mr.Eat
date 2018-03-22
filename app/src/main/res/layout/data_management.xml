@@ -27,7 +27,7 @@
 			<!--上下布局，左侧文字开始-->
 			<LinearLayout android:orientation="vertical"
 					android:layout_width="295dp"
-					android:layout_height="70dp"
+					android:layout_height="75dp"
 					android:layout_marginLeft="5dp"
 					android:layout_marginRight="0dp"
 					android:weightSum="1">
@@ -58,6 +58,7 @@
 				android:layout_height="80dp"
 				android:layout_marginLeft="0dp"
 				android:textSize="24sp"
+				android:background="@drawable/btn_nor_down_green"
 				android:text="备份"/>
 
 		</LinearLayout>
@@ -128,6 +129,7 @@
 				android:layout_height="80dp"
 				android:layout_marginLeft="0dp"
 				android:textSize="24sp"
+				android:background="@drawable/btn_nor_down_green"
 				android:text="恢复" />
 
 

@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="Mr.Eat 食物多样性记录手册">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
